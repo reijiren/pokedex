@@ -13,13 +13,22 @@ export default function Home(){
 
     const fetchPokemon = async() => {
         setLoading(true);
-        setPokeData([]);
 
         axios.get(`${url}?offset=${(page - 1) * 20}&limit=20`)
         .then((res) => {
             setNext(res.data.next);
             setPrevious(res.data.previous);
-            getPokemonInfo(res.data.results);
+            // getPokemonInfo(res.data.results);
+
+            res.data.results.map(async(item) => {
+                const result = await axios.get(item.url);
+    
+                setPokeData(state => {
+                    state=[...state, result.data];
+                    state.sort((a, b) => a.id > b.id ? 1 : -1);
+                    return state;
+                })
+            })
         })
         .catch((err) => {
             console.log(err);
@@ -30,25 +39,18 @@ export default function Home(){
 
     const getPokemonInfo = async(res) => {
         res.map(async(item) => {
-            axios.get(item.url)
-            .then((result) => {
-                setPokeData(state => {
-                    state=[...state, result.data];
-                    state.sort((a, b) => a.id > b.id ? 1 : -1);
-                    return state;
-                })
-            })
-            // const result = await axios.get(item.url);
+            const result = await axios.get(item.url);
 
-            // setPokeData(state => {
-            //     state=[...state, result.data];
-            //     state.sort((a, b) => a.id > b.id ? 1 : -1);
-            //     return state;
-            // })
+            setPokeData(state => {
+                state = [...state, result.data];
+                state.sort((a, b) => a.id > b.id ? 1 : -1);
+                return state;
+            })
         })
     }
 
     useEffect(() => {
+        setPokeData([]);
         fetchPokemon();
     }, [page]);
 
