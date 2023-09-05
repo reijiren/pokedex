@@ -21,12 +21,20 @@ export default function Card({ pokemon, loading }){
                                 </TransformComponent>
                             </TransformWrapper>
                             <div>
-                                Abilities :
+                                <div className="mb-2">
+                                    Abilities :
+                                </div>
                                 {
-                                // JSON.stringify(pokemon)
-                                    // item.abilities.map((i, e) => {
-                                    //     return(<div key={i}>{JSON.stringify(Object.keys(e))}</div>)
-                                    // })
+                                    item.abilities.length != 0 ? 
+                                        item.abilities.map((e)=>{
+                                            return(
+                                                <div className={`d-flex align-self-start`}>
+                                                    <ul className={`${styles.list} align-self-start`}>
+                                                        <li>{e.ability.name}</li>
+                                                    </ul>
+                                                </div>
+                                            )
+                                        }) : <h4>No ability</h4>
                                 }
                             </div>
                         </div>

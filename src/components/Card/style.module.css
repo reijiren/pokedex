@@ -5,3 +5,8 @@
     min-height: 200px;
     margin: 20px;
 }
+
+.list{
+    margin-left: -20px;
+    margin-bottom: 5px;
+}
